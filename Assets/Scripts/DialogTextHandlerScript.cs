@@ -35,6 +35,8 @@ public class DialogTextHandlerScript : MonoBehaviour {
 
     private string lastMessage = "";
 
+    private bool shouldStoreResponse = false;
+
     public string GeneratePrompt(string message) {
         // Load to ensure it is the accurate version of the dialog
         LoadDialog();
@@ -61,14 +63,21 @@ public class DialogTextHandlerScript : MonoBehaviour {
         finalPrompt += message;
         finalPrompt += format4;
 
+        shouldStoreResponse = true;
         return finalPrompt;
     }
 
     public void StoreResponse(string response) {
+        if (!shouldStoreResponse) {
+            return;
+        }
+
         messages.Add(lastMessage);
         responses.Add(response);
         // Save to keep dialog file up to date
         SaveDialog();
+
+        shouldStoreResponse = false;
     }
 
     public string GetLatestResponse() {
