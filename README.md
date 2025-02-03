@@ -38,7 +38,8 @@ Steps that must be completed each time before you can continue are tagged with [
 4. Temperature and Repetition Penalty: Parameters to be passed to the LLM.
 5. Prompt Formatting: How the prompt string is formatted before feeding into the model. Default values are based on bartowski/Mistral-Nemo-Instruct-2407-GGUF.
 
-After completing all these steps, press "Save and Close" in the bottom right to start.
+After completing all these steps, press "Save and Close" in the bottom right to start.  
+Settings data is automatically saved and is loaded each time the app is opened.
 
 # Controls
 
@@ -46,6 +47,10 @@ Most should be standard UI controls.
 
 Aside from that, mouse click and drag the character portrait to move it. Mouse wheel to zoom.    
 "Reset camera" button available near top left corner.
-   
+
+# Saving Character Data
+
+The character context, action dialog, chat logs are saved in the character folder that was set in the settings screen (same folder the images are in).  
+Saving occurs automatically.
 
 
