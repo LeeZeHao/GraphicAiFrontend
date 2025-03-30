@@ -31,7 +31,7 @@ public class ActionsScript : MonoBehaviour
     [SerializeField] TMP_InputField websitePromptInput;
     [SerializeField] TMP_Dropdown openWebsiteDropdown;
 
-    private int currentWebsiteValue;
+    private int currentWebsiteValue = 0;
     private List<string> websiteNames = new List<string> { "Example Site" };
     private List<string> websiteLinks = new List<string> { "https://example.com/" };
     private List<string> websitePrompts = new List<string> { "I'm opening the site. *I open example.com.*" };
@@ -93,6 +93,10 @@ public class ActionsScript : MonoBehaviour
 
             saveStatusText.text = "Previous actions loaded. (" + folder + "/ActionsSave.txt)";
         } catch {
+            websiteNames = new List<string> { "Example Site" };
+            websiteLinks = new List<string> { "https://example.com/" };
+            websitePrompts = new List<string> { "I'm opening the site. *I open example.com.*" };
+
             saveStatusText.text = "Load failed due to bad JSON format, creating new save at " + folder + "/ActionsSave.txt";
             SaveActions();
         }

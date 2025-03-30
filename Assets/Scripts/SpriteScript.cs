@@ -59,6 +59,7 @@ public class SpriteScript : ObserverInterface
             this.currentMood = mood;
         }
         this.body = statusScript.GetBody();
+        Debug.Log(this.body);
 
         UpdateSprite();
 

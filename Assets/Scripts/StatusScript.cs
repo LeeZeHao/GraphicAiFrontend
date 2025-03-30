@@ -24,6 +24,7 @@ public class StatusScript : ObserverInterface
 
     public void SetBody(int body) {
         this.body = body;
+        Debug.Log("body = " + body);
     }
 
     // Saves and loads the StatusSave.txt file when the mood is updated
