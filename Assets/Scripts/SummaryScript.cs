@@ -41,6 +41,7 @@ public class SummaryScript : MonoBehaviour
 
     public void OnClickSummaryButton()
     {
+        GetSettings();
         botName = contextScript.botName;
         folder = settingsScript.folder;
         summarySaveLocationText.text = folder + "/SummarySave.txt";
