@@ -13,6 +13,7 @@ public class LogicScript : MonoBehaviour
     [SerializeField] SettingsScript settingsScript;
     [SerializeField] DialogTextHandlerScript dialogTextHandlerScript;
     [SerializeField] StatusScript statusScript;
+    [SerializeField] SummaryScript summaryScript;
 
     [SerializeField] TMP_InputField sendInputField;
     [SerializeField] Button sendButton;

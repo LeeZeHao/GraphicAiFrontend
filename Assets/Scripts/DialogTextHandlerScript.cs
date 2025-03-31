@@ -19,6 +19,7 @@ public class DialogTextHandlerScript : MonoBehaviour {
     [SerializeField] SettingsScript settingsScript;
     [SerializeField] ContextScript contextScript;
     [SerializeField] StatusScript statusScript;
+    [SerializeField] SummaryScript summaryScript;
 
     private string folder = Application.dataPath + "/character";
 
@@ -60,6 +61,17 @@ public class DialogTextHandlerScript : MonoBehaviour {
             finalPrompt += format3;
         }
 
+        // SUMMARY ADDED HERE
+        // Here, check if we need to add summary to the context.
+        if (summaryScript.isUsingSummary)
+        {
+            string obtainedSummary = summaryScript.GetSummaryString();
+            obtainedSummary = obtainedSummary.Trim();
+            if (!string.IsNullOrEmpty(obtainedSummary))
+            {
+                finalPrompt += "*" + botName + " has long term memory and can remember past conversations, and remembers that in a past conversation; " + obtainedSummary + "* ";
+            }
+        }
         finalPrompt += message;
         finalPrompt += format4;
 
@@ -155,6 +167,22 @@ public class DialogTextHandlerScript : MonoBehaviour {
         logSaveLocationText.text = "Note: Dialog file saved at " + folder + "/DialogSave.txt";
 
         logCanvas.gameObject.SetActive(true);
+    }
+
+    // Returns the formatted dialog (only, no character description etc) as a string.
+    public string GetOnlyDialogAsString()
+    {
+        string logString = "";
+        logString += botName + " : " + firstDialog + "\n\n";
+        for (int i = 0; i < messages.Count; i++)
+        {
+            logString += messages[i];
+            logString += "\n\n";
+            logString += botName + ": " + responses[i];
+            logString += "\n\n";
+        }
+
+        return logString;
     }
 
     public void OnClickLogCloseButton() {
