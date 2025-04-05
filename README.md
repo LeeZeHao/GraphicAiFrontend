@@ -10,8 +10,10 @@ Includes features:
 * Loading local images for the character and background display
 * Customizable character name and context
 * Customizable type and number of emotion categories for the character responses, which affects which graphics are used in display
+* Speech to Text powered by whisper.cpp
+* Long term memory: current dialog can be summarized and stored. This summary can be remembered and referenced by the bot even if the dialog is reset. 
 
-![image](https://github.com/user-attachments/assets/055905e5-83d6-4189-b8db-cafd795ccf0a)
+![image](https://github.com/user-attachments/assets/d6e65799-fb06-4d0c-ba12-6d09380e3ac6)
 
 # Installation
 
@@ -19,6 +21,8 @@ Includes features:
 2. Extract and run the .exe to run the app.
 
 # How to Use
+
+![image](https://github.com/user-attachments/assets/055905e5-83d6-4189-b8db-cafd795ccf0a)
 
 When loading into the app each time, a settings screen will appear. The settings here should be configured properly before continuing.
 Steps that must be completed each time before you can continue are tagged with [COMPULSORY] here.
@@ -47,6 +51,15 @@ Most should be standard UI controls.
 
 Aside from that, mouse click and drag the character portrait to move it. Mouse wheel to zoom.    
 "Reset camera" button available near top left corner.
+
+### Chat
+Type the text you want to send into the text box at the bottom, then click "Send".
+
+### Speech to Text
+Press "STT" next to the text box to start recording, and press again to stop. The recording will be converted to text in the text box. (Powered by whisper.cpp)
+
+### Long term memory
+Use the "Summarize" feature in the top right corner to summarize the current dialog! The current dialog will be summarized and stored. This summary can be remembered and referenced by the bot even if the dialog is reset. (Turn "Using prev. summary" to off if not wanted)
 
 # Saving Character Data
 
