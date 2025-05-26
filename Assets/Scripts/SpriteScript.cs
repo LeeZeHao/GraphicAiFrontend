@@ -9,6 +9,11 @@ public class SpriteScript : ObserverInterface
 
     [SerializeField] private Image bodyImage;
     [SerializeField] private Image faceImage;
+    // For effects
+    [SerializeField] private Image effect0Image;
+    [SerializeField] private Image effect1Image;
+    [SerializeField] private Image effect2Image;
+    [SerializeField] private Image effect3Image;
     [SerializeField] private ImagesScript imagesScript;
 
     [SerializeField] private AudioSource notificationAudioSource;
@@ -20,6 +25,11 @@ public class SpriteScript : ObserverInterface
 
     private int currentMood = 0;
     private int body = 0;
+    // For effects
+    private bool effect0Active = false;
+    private bool effect1Active = false;
+    private bool effect2Active = false;
+    private bool effect3Active = false;
 
     private bool justBooted = true;
 
@@ -42,6 +52,11 @@ public class SpriteScript : ObserverInterface
 
         bodyImage.color = Color.white;
         faceImage.color = Color.white;
+        // For effects
+        effect0Image.color = Color.clear; // Default is clear so that we can see the character even if there is no effect image
+        effect1Image.color = Color.clear;
+        effect2Image.color = Color.clear;
+        effect3Image.color = Color.clear;
 
         StartCoroutine(BlinkTimer());
     }
@@ -69,6 +84,41 @@ public class SpriteScript : ObserverInterface
 
         StopCoroutine(SpeechTimer());
         StartCoroutine(SpeechTimer());
+
+        // For effects
+        effect0Image.color = Color.clear;
+        effect1Image.color = Color.clear;
+        effect2Image.color = Color.clear;
+        effect3Image.color = Color.clear;
+
+        if (imagesScript.effect0)
+        {
+            effect0Active = statusScript.GetEffect0Active();
+            effect0Image.sprite = imagesScript.effect0;
+            effect0Image.color = Color.white;
+            effect0Image.gameObject.SetActive(effect0Active);
+        }
+        if (imagesScript.effect1)
+        {
+            effect1Active = statusScript.GetEffect1Active();
+            effect1Image.sprite = imagesScript.effect1;
+            effect1Image.color = Color.white;
+            effect1Image.gameObject.SetActive(effect1Active);
+        }
+        if (imagesScript.effect2)
+        {
+            effect2Active = statusScript.GetEffect2Active();
+            effect2Image.sprite = imagesScript.effect2;
+            effect2Image.color = Color.white;
+            effect2Image.gameObject.SetActive(effect2Active);
+        }
+        if (imagesScript.effect3)
+        {
+            effect3Active = statusScript.GetEffect3Active();
+            effect3Image.sprite = imagesScript.effect3;
+            effect3Image.color = Color.white;
+            effect3Image.gameObject.SetActive(effect3Active);
+        }
     }
 
     private void UpdateSprite() {
@@ -85,6 +135,12 @@ public class SpriteScript : ObserverInterface
 
         debugText += "\n\neyesClosed: " + this.eyesClosed;
         debugText += "\nmouthOpen:" + this.mouthOpen;
+
+        // For effects
+        debugText += "\n\neffect0: " + this.effect0Active;
+        debugText += "\neffect1: " + this.effect1Active;
+        debugText += "\neffect2: " + this.effect2Active;
+        debugText += "\neffect3: " + this.effect3Active;
 
         spriteDebugText.text = debugText;
 
@@ -124,6 +180,52 @@ public class SpriteScript : ObserverInterface
 
         faceImage.sprite = faceSprite;
         bodyImage.sprite = bodySprite;
+
+        /*
+        // For effects
+        effect0Image.color = Color.clear;
+        effect1Image.color = Color.clear;
+        effect2Image.color = Color.clear;
+        effect3Image.color = Color.clear;
+
+        // If just booted, don't display the effects
+        if (justBooted)
+        {
+            return;
+        }
+
+        if (imagesScript.effect0)
+        {
+            effect0Active = statusScript.GetEffect0Active();
+            effect0Image.sprite = imagesScript.effect0;
+            effect0Image.color = Color.white;
+            effect0Image.gameObject.SetActive(effect0Active);
+        } 
+
+        if (imagesScript.effect1)
+        {
+            effect1Active = statusScript.GetEffect1Active();
+            effect1Image.sprite = imagesScript.effect1;
+            effect1Image.color = Color.white;
+            effect1Image.gameObject.SetActive(effect1Active);
+        }
+
+        if (imagesScript.effect2)
+        {
+            effect2Active = statusScript.GetEffect2Active();
+            effect2Image.sprite = imagesScript.effect2;
+            effect2Image.color = Color.white;
+            effect2Image.gameObject.SetActive(effect2Active);
+        }
+
+        if (imagesScript.effect3)
+        {
+            effect3Active = statusScript.GetEffect3Active();
+            effect3Image.sprite = imagesScript.effect3;
+            effect3Image.color = Color.white;
+            effect3Image.gameObject.SetActive(effect3Active);
+        }
+        */
     }
 
     private IEnumerator BlinkTimer() {

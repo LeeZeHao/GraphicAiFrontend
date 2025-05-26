@@ -17,12 +17,24 @@ public class ImagesScript : MonoBehaviour
     
     [HideInInspector] public List<Texture2D[]> faceTextures = new List<Texture2D[]>();
 
+    // For effects
+    private Texture2D effect0Tex;
+    private Texture2D effect1Tex;
+    private Texture2D effect2Tex;
+    private Texture2D effect3Tex;
+
     [HideInInspector] public Sprite body0;
     [HideInInspector] public Sprite body1;
     [HideInInspector] public Sprite body2;
     [HideInInspector] public Sprite body3;
 
     [HideInInspector] public List<Sprite[]> faces = new List<Sprite[]>();
+
+    // For effects
+    [HideInInspector] public Sprite effect0;
+    [HideInInspector] public Sprite effect1;
+    [HideInInspector] public Sprite effect2;
+    [HideInInspector] public Sprite effect3;
 
     private void Awake() {
 
@@ -68,6 +80,47 @@ public class ImagesScript : MonoBehaviour
             backgroundImage.color = Color.white;
         } catch {
             return false;
+        }
+
+        // Effect images are optional, use a bunch of try catches
+        try
+        {
+            effect0Tex = GetTexFromFile(folder + "/effect0.png");
+            // convert to sprite
+            effect0 = GetSpriteFromTex(effect0Tex);
+        }
+        catch
+        {
+        }
+
+        try
+        {
+            effect1Tex = GetTexFromFile(folder + "/effect1.png");
+            // convert to sprite
+            effect1 = GetSpriteFromTex(effect1Tex);
+        }
+        catch
+        {
+        }
+
+        try
+        {
+            effect2Tex = GetTexFromFile(folder + "/effect2.png");
+            // convert to sprite
+            effect2 = GetSpriteFromTex(effect2Tex);
+        }
+        catch
+        {
+        }
+
+        try
+        {
+            effect3Tex = GetTexFromFile(folder + "/effect3.png");
+            // convert to sprite
+            effect3 = GetSpriteFromTex(effect3Tex);
+        }
+        catch
+        {
         }
 
         return true;

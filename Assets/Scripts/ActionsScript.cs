@@ -12,7 +12,6 @@ public class ActionsScript : MonoBehaviour
     [SerializeField] SettingsScript settingsScript;
     [SerializeField] StatusScript statusScript;
 
-    [SerializeField] TMP_Text responseText;
     [SerializeField] Canvas actionsCanvas;
 
     [SerializeField] TMP_Text saveStatusText;
