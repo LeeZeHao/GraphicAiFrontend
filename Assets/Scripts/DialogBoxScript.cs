@@ -18,13 +18,16 @@ public class DialogBoxScript : ObserverInterface
         //finalText.Replace("\\\\*", "\\*");
 
         responseText.text = finalText;
+        responseText.enabled = true;
     }
 
     public override void Waiting() {
         responseText.text = "Sending...";
+        responseText.enabled = true;
     }
 
     public override void ServerError(string error) {
         responseText.text = "An error has occured, please check connection to server!\n" + error;
+        responseText.enabled = true;
     }
 }

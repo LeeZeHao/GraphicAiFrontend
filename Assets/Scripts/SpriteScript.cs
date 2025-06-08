@@ -74,7 +74,6 @@ public class SpriteScript : ObserverInterface
             this.currentMood = mood;
         }
         this.body = statusScript.GetBody();
-        Debug.Log(this.body);
 
         UpdateSprite();
 
@@ -84,6 +83,11 @@ public class SpriteScript : ObserverInterface
 
         StopCoroutine(SpeechTimer());
         StartCoroutine(SpeechTimer());
+
+        if (justBooted)
+        {
+            return;
+        }
 
         // For effects
         effect0Image.color = Color.clear;
@@ -122,8 +126,6 @@ public class SpriteScript : ObserverInterface
     }
 
     private void UpdateSprite() {
-        // Debug.Log("Sprite script UpdateSprite");
-
         string debugText = "";
 
         if (justBooted) {

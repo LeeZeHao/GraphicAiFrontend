@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.IO;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 // Example
-/// <s>[INST]Senko from The Helpful Fox Senko-San, an 800 year old kitsune fox girl, 
-/// she is cute and asks a lot of questions![/INST]Hi, I'm Senko! Did you need anything?</s>[INST]Yes, what is the capital of the US?[/INST]
+/// <s>[INST]Lyra is a computer simulated assistant that is capable of answering many questions.[/INST]Hi, I'm Lyra. Did you need anything?</s>[INST]Yes, what is the capital of the US?[/INST]
 
 public class DialogTextHandlerScript : MonoBehaviour {
 
@@ -37,6 +37,11 @@ public class DialogTextHandlerScript : MonoBehaviour {
     private string lastMessage = "";
 
     private bool shouldStoreResponse = false;
+
+    // For edit bot response
+    [SerializeField] private TMP_Text responseText;
+    [SerializeField] private TMP_InputField editResponseInputField;
+    [SerializeField] private Canvas editResponseCanvas;
 
     public string GeneratePrompt(string message) {
         // Load to ensure it is the accurate version of the dialog
@@ -208,5 +213,22 @@ public class DialogTextHandlerScript : MonoBehaviour {
 
     public void OnClickCancelReset() {
         resetCanvas.gameObject.SetActive(false);
+    }
+
+    // For editing bot response
+    public void OnClickEditResponse()
+    {
+        Debug.Log("OnClickEditResponse");
+        editResponseInputField.text = responseText.text;
+        editResponseCanvas.gameObject.SetActive(true);
+    }
+
+    public void OnClickEditResponseClose()
+    {
+        responses[responses.Count - 1] = editResponseInputField.text;
+        SaveDialog();
+
+        responseText.text = editResponseInputField.text;
+        editResponseCanvas.gameObject.SetActive(false);
     }
 }
