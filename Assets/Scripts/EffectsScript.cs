@@ -21,11 +21,16 @@ public class EffectsScript : MonoBehaviour
     [SerializeField] TMP_InputField effectInputField1;
     [SerializeField] TMP_InputField effectInputField2;
     [SerializeField] TMP_InputField effectInputField3;
-    // actions for turning off effect0-3
-    [SerializeField] TMP_InputField effectInputFieldOff0;
-    [SerializeField] TMP_InputField effectInputFieldOff1;
-    [SerializeField] TMP_InputField effectInputFieldOff2;
-    [SerializeField] TMP_InputField effectInputFieldOff3;
+    // actions for turning on effect0-3a
+    [SerializeField] TMP_InputField effectInputField0a;
+    [SerializeField] TMP_InputField effectInputField1a;
+    [SerializeField] TMP_InputField effectInputField2a;
+    [SerializeField] TMP_InputField effectInputField3a;
+    // actions for turning on effect0-3b
+    [SerializeField] TMP_InputField effectInputField0b;
+    [SerializeField] TMP_InputField effectInputField1b;
+    [SerializeField] TMP_InputField effectInputField2b;
+    [SerializeField] TMP_InputField effectInputField3b;
 
     private string folder = Application.dataPath + "/character";
 
@@ -61,10 +66,14 @@ public class EffectsScript : MonoBehaviour
             effectInputField1.text = effectsSaveObject.effect1;
             effectInputField2.text = effectsSaveObject.effect2;
             effectInputField3.text = effectsSaveObject.effect3;
-            effectInputFieldOff0.text = effectsSaveObject.effectOff0;
-            effectInputFieldOff1.text = effectsSaveObject.effectOff1;
-            effectInputFieldOff2.text = effectsSaveObject.effectOff2;
-            effectInputFieldOff3.text = effectsSaveObject.effectOff3;
+            effectInputField0a.text = effectsSaveObject.effect0a;
+            effectInputField1a.text = effectsSaveObject.effect1a;
+            effectInputField2a.text = effectsSaveObject.effect2a;
+            effectInputField3a.text = effectsSaveObject.effect3a;
+            effectInputField0b.text = effectsSaveObject.effect0b;
+            effectInputField1b.text = effectsSaveObject.effect1b;
+            effectInputField2b.text = effectsSaveObject.effect2b;
+            effectInputField3b.text = effectsSaveObject.effect3b;
 
             saveStatusText.text = "Previous actions loaded. (" + folder + "/EffectsSave.txt)";
         }
@@ -84,10 +93,14 @@ public class EffectsScript : MonoBehaviour
         effectsSaveObject.effect1 = effectInputField1.text;
         effectsSaveObject.effect2 = effectInputField2.text;
         effectsSaveObject.effect3 = effectInputField3.text;
-        effectsSaveObject.effectOff0 = effectInputFieldOff0.text;
-        effectsSaveObject.effectOff1 = effectInputFieldOff1.text;
-        effectsSaveObject.effectOff2 = effectInputFieldOff2.text;
-        effectsSaveObject.effectOff3 = effectInputFieldOff3.text;
+        effectsSaveObject.effect0a = effectInputField0a.text;
+        effectsSaveObject.effect1a = effectInputField1a.text;
+        effectsSaveObject.effect2a = effectInputField2a.text;
+        effectsSaveObject.effect3a = effectInputField3a.text;
+        effectsSaveObject.effect0b = effectInputField0b.text;
+        effectsSaveObject.effect1b = effectInputField1b.text;
+        effectsSaveObject.effect2b = effectInputField2b.text;
+        effectsSaveObject.effect3b = effectInputField3b.text;
 
         string json = JsonUtility.ToJson(effectsSaveObject);
 
@@ -101,65 +114,93 @@ public class EffectsScript : MonoBehaviour
         public string effect1;
         public string effect2;
         public string effect3;
-        public string effectOff0;
-        public string effectOff1;
-        public string effectOff2;
-        public string effectOff3;
+        public string effect0a;
+        public string effect1a;
+        public string effect2a;
+        public string effect3a;
+        public string effect0b;
+        public string effect1b;
+        public string effect2b;
+        public string effect3b;
     }
 
-    public void OnClickEffect0()
+    public void OnClickEffect0(int newActive)
     {
         LoadEffects();
-        logicScript.Send(effectInputField0.text);
-        statusScript.SetEffect0Active(true);
+        switch (newActive)
+        {
+            case 0:
+                logicScript.Send(effectInputField0.text);
+                break;
+            case 1:
+                logicScript.Send(effectInputField0a.text);
+                break;
+            case 2:
+                logicScript.Send(effectInputField0b.text);
+                break;
+            default:
+                break;
+        }
+        statusScript.SetEffect0Active(newActive);
     }
 
-    public void OnClickEffect1()
+    public void OnClickEffect1(int newActive)
     {
         LoadEffects();
-        logicScript.Send(effectInputField1.text);
-        statusScript.SetEffect1Active(true);
+        switch (newActive)
+        {
+            case 0:
+                logicScript.Send(effectInputField1.text);
+                break;
+            case 1:
+                logicScript.Send(effectInputField1a.text);
+                break;
+            case 2:
+                logicScript.Send(effectInputField1b.text);
+                break;
+            default:
+                break;
+        }
+        statusScript.SetEffect1Active(newActive);
     }
 
-    public void OnClickEffect2()
+    public void OnClickEffect2(int newActive)
     {
         LoadEffects();
-        logicScript.Send(effectInputField2.text);
-        statusScript.SetEffect2Active(true);
+        switch (newActive)
+        {
+            case 0:
+                logicScript.Send(effectInputField2.text);
+                break;
+            case 1:
+                logicScript.Send(effectInputField2a.text);
+                break;
+            case 2:
+                logicScript.Send(effectInputField2b.text);
+                break;
+            default:
+                break;
+        }
+        statusScript.SetEffect2Active(newActive);
     }
 
-    public void OnClickEffect3()
+    public void OnClickEffect3(int newActive)
     {
         LoadEffects();
-        logicScript.Send(effectInputField3.text);
-        statusScript.SetEffect3Active(true);
-    }
-
-    public void OnClickEffectOff0()
-    {
-        LoadEffects();
-        logicScript.Send(effectInputFieldOff0.text);
-        statusScript.SetEffect0Active(false);
-    }
-
-    public void OnClickEffectOff1()
-    {
-        LoadEffects();
-        logicScript.Send(effectInputFieldOff1.text);
-        statusScript.SetEffect1Active(false);
-    }
-
-    public void OnClickEffectOff2()
-    {
-        LoadEffects();
-        logicScript.Send(effectInputFieldOff2.text);
-        statusScript.SetEffect2Active(false);
-    }
-
-    public void OnClickEffectOff3()
-    {
-        LoadEffects();
-        logicScript.Send(effectInputFieldOff3.text);
-        statusScript.SetEffect3Active(false);
+        switch (newActive)
+        {
+            case 0:
+                logicScript.Send(effectInputField3.text);
+                break;
+            case 1:
+                logicScript.Send(effectInputField3a.text);
+                break;
+            case 2:
+                logicScript.Send(effectInputField3b.text);
+                break;
+            default:
+                break;
+        }
+        statusScript.SetEffect3Active(newActive);
     }
 }

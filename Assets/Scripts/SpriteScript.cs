@@ -26,10 +26,10 @@ public class SpriteScript : ObserverInterface
     private int currentMood = 0;
     private int body = 0;
     // For effects
-    private bool effect0Active = false;
-    private bool effect1Active = false;
-    private bool effect2Active = false;
-    private bool effect3Active = false;
+    private int effect0Active = 0;
+    private int effect1Active = 0;
+    private int effect2Active = 0;
+    private int effect3Active = 0;
 
     private bool justBooted = true;
 
@@ -53,10 +53,10 @@ public class SpriteScript : ObserverInterface
         bodyImage.color = Color.white;
         faceImage.color = Color.white;
         // For effects
-        effect0Image.color = Color.clear; // Default is clear so that we can see the character even if there is no effect image
-        effect1Image.color = Color.clear;
-        effect2Image.color = Color.clear;
-        effect3Image.color = Color.clear;
+        effect0Image.color = Color.white; // Default is clear so that we can see the character even if there is no effect image
+        effect1Image.color = Color.white;
+        effect2Image.color = Color.white;
+        effect3Image.color = Color.white;
 
         StartCoroutine(BlinkTimer());
     }
@@ -90,18 +90,78 @@ public class SpriteScript : ObserverInterface
         }
 
         // For effects
-        effect0Image.color = Color.clear;
-        effect1Image.color = Color.clear;
-        effect2Image.color = Color.clear;
-        effect3Image.color = Color.clear;
+        effect0Image.color = Color.white;
+        effect1Image.color = Color.white;
+        effect2Image.color = Color.white;
+        effect3Image.color = Color.white;
 
-        if (imagesScript.effect0)
+            
+        effect0Active = statusScript.GetEffect0Active();
+        switch (effect0Active)
         {
-            effect0Active = statusScript.GetEffect0Active();
-            effect0Image.sprite = imagesScript.effect0;
-            effect0Image.color = Color.white;
-            effect0Image.gameObject.SetActive(effect0Active);
+            case 0:
+                effect0Image.sprite = imagesScript.effect0;
+                break;
+            case 1:
+                effect0Image.sprite = imagesScript.effect0a;
+                break;
+            case 2:
+                effect0Image.sprite = imagesScript.effect0b;
+                break;
+            default:
+                break;
         }
+
+        effect1Active = statusScript.GetEffect1Active();
+        switch (effect1Active)
+        {
+            case 0:
+                effect1Image.sprite = imagesScript.effect1;
+                break;
+            case 1:
+                effect1Image.sprite = imagesScript.effect1a;
+                break;
+            case 2:
+                effect1Image.sprite = imagesScript.effect1b;
+                break;
+            default:
+                break;
+        }
+
+        effect2Active = statusScript.GetEffect2Active();
+        switch (effect2Active)
+        {
+            case 0:
+                effect2Image.sprite = imagesScript.effect2;
+                break;
+            case 1:
+                effect2Image.sprite = imagesScript.effect2a;
+                break;
+            case 2:
+                effect2Image.sprite = imagesScript.effect2b;
+                break;
+            default:
+                break;
+        }
+
+        effect3Active = statusScript.GetEffect3Active();
+        switch (effect3Active)
+        {
+            case 0:
+                effect3Image.sprite = imagesScript.effect3;
+                break;
+            case 1:
+                effect3Image.sprite = imagesScript.effect3a;
+                break;
+            case 2:
+                effect3Image.sprite = imagesScript.effect3b;
+                break;
+            default:
+                break;
+        }
+
+
+        /*
         if (imagesScript.effect1)
         {
             effect1Active = statusScript.GetEffect1Active();
@@ -123,6 +183,7 @@ public class SpriteScript : ObserverInterface
             effect3Image.color = Color.white;
             effect3Image.gameObject.SetActive(effect3Active);
         }
+        */
     }
 
     private void UpdateSprite() {
@@ -182,52 +243,6 @@ public class SpriteScript : ObserverInterface
 
         faceImage.sprite = faceSprite;
         bodyImage.sprite = bodySprite;
-
-        /*
-        // For effects
-        effect0Image.color = Color.clear;
-        effect1Image.color = Color.clear;
-        effect2Image.color = Color.clear;
-        effect3Image.color = Color.clear;
-
-        // If just booted, don't display the effects
-        if (justBooted)
-        {
-            return;
-        }
-
-        if (imagesScript.effect0)
-        {
-            effect0Active = statusScript.GetEffect0Active();
-            effect0Image.sprite = imagesScript.effect0;
-            effect0Image.color = Color.white;
-            effect0Image.gameObject.SetActive(effect0Active);
-        } 
-
-        if (imagesScript.effect1)
-        {
-            effect1Active = statusScript.GetEffect1Active();
-            effect1Image.sprite = imagesScript.effect1;
-            effect1Image.color = Color.white;
-            effect1Image.gameObject.SetActive(effect1Active);
-        }
-
-        if (imagesScript.effect2)
-        {
-            effect2Active = statusScript.GetEffect2Active();
-            effect2Image.sprite = imagesScript.effect2;
-            effect2Image.color = Color.white;
-            effect2Image.gameObject.SetActive(effect2Active);
-        }
-
-        if (imagesScript.effect3)
-        {
-            effect3Active = statusScript.GetEffect3Active();
-            effect3Image.sprite = imagesScript.effect3;
-            effect3Image.color = Color.white;
-            effect3Image.gameObject.SetActive(effect3Active);
-        }
-        */
     }
 
     private IEnumerator BlinkTimer() {

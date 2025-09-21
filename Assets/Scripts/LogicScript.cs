@@ -41,9 +41,11 @@ public class LogicScript : MonoBehaviour
 
         // clean input
         userMessage = userMessage.Trim();
+        /*
         if (userMessage.Length <= 0) {
             return;
         }
+        */
 
         string message = userMessage;
         string prompt = dialogTextHandlerScript.GeneratePrompt(message);

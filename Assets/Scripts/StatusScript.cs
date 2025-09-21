@@ -11,10 +11,10 @@ public class StatusScript : ObserverInterface
     private int body = 0;
 
     // For effects
-    private bool effect0Active = false;
-    private bool effect1Active = false;
-    private bool effect2Active = false;
-    private bool effect3Active = false;
+    private int effect0Active = 0;
+    private int effect1Active = 0;
+    private int effect2Active = 0;
+    private int effect3Active = 0;
 
     public int GetMood() {
         return mood;
@@ -34,42 +34,42 @@ public class StatusScript : ObserverInterface
     }
 
     // For effects
-    public bool GetEffect0Active()
+    public int GetEffect0Active()
     {
         return effect0Active;
     }
 
-    public void SetEffect0Active(bool isActive)
+    public void SetEffect0Active(int isActive)
     {
         this.effect0Active = isActive;
     }
 
-    public bool GetEffect1Active()
+    public int GetEffect1Active()
     {
         return effect1Active;
     }
 
-    public void SetEffect1Active(bool isActive)
+    public void SetEffect1Active(int isActive)
     {
         this.effect1Active = isActive;
     }
 
-    public bool GetEffect2Active()
+    public int GetEffect2Active()
     {
         return effect2Active;
     }
 
-    public void SetEffect2Active(bool isActive)
+    public void SetEffect2Active(int isActive)
     {
         this.effect2Active = isActive;
     }
 
-    public bool GetEffect3Active()
+    public int GetEffect3Active()
     {
         return effect3Active;
     }
 
-    public void SetEffect3Active(bool isActive)
+    public void SetEffect3Active(int isActive)
     {
         this.effect3Active = isActive;
     }
@@ -134,19 +134,19 @@ public class StatusScript : ObserverInterface
     private class StatusSaveObject {
         public int mood;
         public int body;
-        public bool effect0Active;
-        public bool effect1Active;
-        public bool effect2Active;
-        public bool effect3Active;
+        public int effect0Active;
+        public int effect1Active;
+        public int effect2Active;
+        public int effect3Active;
     }
 
     public void ResetStatus() {
         mood = 0;
         body = 0;
-        effect0Active = false;
-        effect1Active = false;
-        effect2Active = false;
-        effect3Active = false;
+        effect0Active = 0;
+        effect1Active = 0;
+        effect2Active = 0;
+        effect3Active = 0;
         SaveStatus();
     }
 
