@@ -19,8 +19,13 @@ public class SettingsScript : MonoBehaviour
     [SerializeField] private TMP_InputField folderInputField;
     [SerializeField] private TMP_Text folderStatusText;
 
+    [SerializeField] private Button zeroShotButton;
+    [SerializeField] private TMP_InputField zeroShotInputField;
+    [SerializeField] private TMP_Text zeroShotStatusText;
+
     [SerializeField] private TMP_InputField temperatureInputField;
     [SerializeField] private TMP_InputField repPenInputField;
+    [SerializeField] private TMP_InputField neutralScaleInputField;
 
     [SerializeField] private TMP_InputField formatInputField1;
     [SerializeField] private TMP_InputField formatInputField2;
@@ -39,9 +44,11 @@ public class SettingsScript : MonoBehaviour
     [SerializeField] private TMP_Text closeStatusText;
 
     [HideInInspector] public string url = "http://localhost:5001";
+    [HideInInspector] public string zeroShotUrl = "http://127.0.0.1:8000";
     [HideInInspector] public string folder = Application.dataPath + "/character";
     [HideInInspector] public float temperature = 0.75f;
     [HideInInspector] public float repPen = 1.07f;
+    [HideInInspector] public float neutralScale = 0.5f;
 
     [HideInInspector] public List<string> emotions = new List<string> { "neutral" };
 
@@ -51,6 +58,7 @@ public class SettingsScript : MonoBehaviour
     [HideInInspector] public string format4 = "[/INST]";
 
     [HideInInspector] public bool isUrlConnected = false;
+    [HideInInspector] public bool isZeroShotConnected = false;
     [HideInInspector] public bool isFolderInit = false;
 
     private void Awake() {
@@ -58,6 +66,7 @@ public class SettingsScript : MonoBehaviour
         folderInputField.text = folder;
         temperatureInputField.text = temperature.ToString();
         repPenInputField.text = repPen.ToString();
+        neutralScaleInputField.text = neutralScale.ToString();
 
         formatInputField1.text = format1;
         formatInputField2.text = format2;
@@ -120,6 +129,27 @@ public class SettingsScript : MonoBehaviour
             folderStatusText.text = "Folder initialized, images, context, actions loaded.";
             isFolderInit = true;
         }
+    }
+
+    public void OnClickZeroShotButton() {
+        zeroShotButton.interactable = false;
+
+        zeroShotInputField.text = zeroShotInputField.text.Replace(" ", "");
+        zeroShotInputField.text = zeroShotInputField.text.Trim('/');
+        zeroShotInputField.text = zeroShotInputField.text.Trim('\\');
+        zeroShotInputField.text = zeroShotInputField.text.Trim('#');
+
+        if (zeroShotInputField.text.Length == 0)
+        {
+            zeroShotStatusText.text = "Nothing entered in the Zero Shot URL text field!";
+            zeroShotButton.interactable = true;
+            return;
+        }
+
+        zeroShotUrl = zeroShotInputField.text;
+        Debug.Log("Testing Zero Shot url: " + zeroShotUrl);
+
+        StartCoroutine(TestZeroShotUrl());
     }
 
     // If the user changes a value at the emotions, then we need to tell them to re-int folder
@@ -234,6 +264,26 @@ public class SettingsScript : MonoBehaviour
         }
     }
 
+    private IEnumerator TestZeroShotUrl()
+    {
+        using (UnityWebRequest request = UnityWebRequest.Get(zeroShotUrl + "/health"))
+        {
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                zeroShotStatusText.text = "Local zero shot model connected.";
+                isZeroShotConnected = true;
+            }
+            else
+            {
+                zeroShotStatusText.text = "Zero shot model connection failed! Please check entered URL.";
+                isZeroShotConnected = false;
+            }
+            zeroShotButton.interactable = true;
+        }
+    }
+
     private void LoadSettings() {
         if (!File.Exists(Application.dataPath + "/SettingsSave.txt")) {
             saveStatusText.text = "No previous settings, creating new save at " + Application.dataPath + "/SettingsSave.txt";
@@ -246,8 +296,10 @@ public class SettingsScript : MonoBehaviour
             SettingsSaveObject settingsSaveObject = JsonUtility.FromJson<SettingsSaveObject>(settingsSaveString);
             this.url = settingsSaveObject.url;
             this.folder = settingsSaveObject.folder;
+            this.zeroShotUrl = settingsSaveObject.zeroShotUrl;
             this.temperature = settingsSaveObject.temperature;
             this.repPen = settingsSaveObject.repPen;
+            this.neutralScale = settingsSaveObject.neutralScale;
 
             this.format1 = settingsSaveObject.format1;
             this.format2 = settingsSaveObject.format2;
@@ -259,8 +311,10 @@ public class SettingsScript : MonoBehaviour
 
             urlInputField.text = url;
             folderInputField.text = folder;
+            zeroShotInputField.text = zeroShotUrl;
             temperatureInputField.text = temperature.ToString();
             repPenInputField.text = repPen.ToString();
+            neutralScaleInputField.text = neutralScale.ToString();
 
             saveStatusText.text = "Previous settings loaded. (" + Application.dataPath + "/SettingsSave.txt)";
         } catch {
@@ -273,6 +327,7 @@ public class SettingsScript : MonoBehaviour
         // need to grab values of the float input fields and formats too!
         float.TryParse(temperatureInputField.text, out this.temperature);
         float.TryParse(repPenInputField.text, out this.repPen);
+        float.TryParse(neutralScaleInputField.text, out this.neutralScale);
         format1 = formatInputField1.text;
         format2 = formatInputField2.text;
         format3 = formatInputField3.text;
@@ -282,8 +337,10 @@ public class SettingsScript : MonoBehaviour
         SettingsSaveObject settingsSaveObject = new SettingsSaveObject();
         settingsSaveObject.url = url;
         settingsSaveObject.folder = folder;
+        settingsSaveObject.zeroShotUrl = zeroShotUrl;
         settingsSaveObject.temperature = temperature;
         settingsSaveObject.repPen = repPen;
+        settingsSaveObject.neutralScale = neutralScale;
         settingsSaveObject.format1 = format1;
         settingsSaveObject.format2 = format2;
         settingsSaveObject.format3 = format3;
@@ -301,9 +358,11 @@ public class SettingsScript : MonoBehaviour
     private class SettingsSaveObject {
         public string url;
         public string folder;
+        public string zeroShotUrl;
 
         public float temperature;
         public float repPen;
+        public float neutralScale;
 
         public string format1;
         public string format2;

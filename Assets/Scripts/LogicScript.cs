@@ -108,83 +108,188 @@ public class LogicScript : MonoBehaviour
         www.Dispose();
     }
 
-    // Use the LLM to check the emotion!
+    // Use the LLM or Zero-shot machine to check the emotion!
     IEnumerator PostCheckSentiment(string response) {
         this.emotions = settingsScript.emotions;
 
-        // make the emotion checking prompt
-        string emotionPrompt = "</s>[INST]One word response. Is this ";
-        foreach (string emotion in emotions) {
-            emotionPrompt += ", " + emotion;
-        }
-        emotionPrompt += "? \"" + response + "\"[/INST]";
+        if (settingsScript.isZeroShotConnected)
+        {
+            // Use Zero shot script, faster
+            Debug.Log("Using new Zero Shot script");
 
-        Debug.Log(emotionPrompt);
+            GenerateZeroShotRequestObject generateRequestObject = new GenerateZeroShotRequestObject();
+            generateRequestObject.text = response;
+            generateRequestObject.candidate_labels = emotions;
+            generateRequestObject.neutral_scale = settingsScript.neutralScale;
+            string generateRequestString = JsonUtility.ToJson(generateRequestObject);
 
-        GenerateRequestObject generateRequestObject = new GenerateRequestObject();
-        generateRequestObject.prompt = emotionPrompt;
-        generateRequestObject.temperature = 0.75f;
-        generateRequestObject.rep_pen = 1.07f;
-        string generateRequestString = JsonUtility.ToJson(generateRequestObject);
+            Debug.Log("Zero Shot script json: " + generateRequestString);
 
-        UnityWebRequest www = UnityWebRequest.Post(settingsScript.url + "/api/v1/generate", generateRequestString, "application/json");
+            UnityWebRequest www = UnityWebRequest.Post(settingsScript.zeroShotUrl + "/classify", generateRequestString, "application/json");
+            yield return new WaitForSeconds(0.1f);
+            yield return www.SendWebRequest();
+            int responseMood = -1;
 
-        yield return new WaitForSeconds(0.1f);
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log("responseMood fail: " + responseMood);
 
-        yield return www.SendWebRequest();
-
-        int responseMood = -1;
-
-        if (www.result != UnityWebRequest.Result.Success) {
-            Debug.Log("responseMood fail: " + responseMood);
-
-            foreach (ObserverInterface observer in observers) {
-                if (observer == null) {
-                    continue;
-                } else {
-                    observer.UpdateObserver(response, -1);
-                    dialogTextHandlerScript.StoreResponse(response);
+                foreach (ObserverInterface observer in observers)
+                {
+                    if (observer == null)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        observer.UpdateObserver(response, -1);
+                        dialogTextHandlerScript.StoreResponse(response);
+                    }
                 }
             }
-        } else {
+            else
+            {
+                // Clean result string
+                string result = www.downloadHandler.text;
+                result = result.Split("prediction")[1];
+                result = result.Split("score")[0];
+                result = result.Replace("\"", "");
+                result = result.Replace(":", "");
+                result = result.Replace(",", "");
+                result = result.Trim();
+                result = result.ToLower();
 
-            // Clean result string
-            string result = www.downloadHandler.text;
-            result = result.Split("\"text\": \"")[1];
-            result = result.Split("\", \"finish_reason\"")[0];
-            result = result.Trim();
-            result = result.ToLower();
+                Debug.Log("Emotion result: " + result);
 
-            Debug.Log("Emotion result: " + result);
+                // Check emotion
+                for (int i = 0; i < emotions.Count; i++)
+                {
+                    if (result.Contains(emotions[i].ToLower()))
+                    {
+                        responseMood = i;
+                        break;
+                    }
+                }
 
-            // Check emotion
-            for (int i = 0; i < emotions.Count; i++) {
-                if (result.Contains(emotions[i].ToLower())) {
-                    responseMood = i;
-                    break;
+                Debug.Log("responseMood success: " + responseMood);
+
+                foreach (ObserverInterface observer in observers)
+                {
+                    if (observer == null)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        observer.UpdateObserver(response, responseMood);
+                        dialogTextHandlerScript.StoreResponse(response);
+                    }
                 }
             }
 
-            Debug.Log("responseMood success: " + responseMood);
+            // re-enable send button 
+            sendInputField.text = "";
+            sendInputField.interactable = true;
+            sendButton.interactable = true;
+            foreach (Button button in actionButtons)
+            {
+                button.interactable = true;
+            }
+            www.Dispose();
+        }
+        else
+        {
+            // Zero shot script not available, fallback on LLM instead
 
-            foreach (ObserverInterface observer in observers) {
-                if (observer == null) {
-                    continue;
-                } else {
-                    observer.UpdateObserver(response, responseMood);
-                    dialogTextHandlerScript.StoreResponse(response);
+            // make the emotion checking prompt
+            string emotionPrompt = "</s>[INST]One word response. Is this ";
+            foreach (string emotion in emotions)
+            {
+                emotionPrompt += ", " + emotion;
+            }
+            emotionPrompt += "? \"" + response + "\"[/INST]";
+
+            Debug.Log(emotionPrompt);
+
+            GenerateRequestObject generateRequestObject = new GenerateRequestObject();
+            generateRequestObject.prompt = emotionPrompt;
+            generateRequestObject.temperature = 0.75f;
+            generateRequestObject.rep_pen = 1.07f;
+            string generateRequestString = JsonUtility.ToJson(generateRequestObject);
+
+            UnityWebRequest www = UnityWebRequest.Post(settingsScript.url + "/api/v1/generate", generateRequestString, "application/json");
+
+            yield return new WaitForSeconds(0.1f);
+
+            yield return www.SendWebRequest();
+
+            int responseMood = -1;
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log("responseMood fail: " + responseMood);
+
+                foreach (ObserverInterface observer in observers)
+                {
+                    if (observer == null)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        observer.UpdateObserver(response, -1);
+                        dialogTextHandlerScript.StoreResponse(response);
+                    }
                 }
             }
-        }
+            else
+            {
 
-        // re-enable send button 
-        sendInputField.text = "";
-        sendInputField.interactable = true;
-        sendButton.interactable = true;
-        foreach (Button button in actionButtons) {
-            button.interactable = true;
+                // Clean result string
+                string result = www.downloadHandler.text;
+                result = result.Split("\"text\": \"")[1];
+                result = result.Split("\", \"finish_reason\"")[0];
+                result = result.Trim();
+                result = result.ToLower();
+
+                Debug.Log("Emotion result: " + result);
+
+                // Check emotion
+                for (int i = 0; i < emotions.Count; i++)
+                {
+                    if (result.Contains(emotions[i].ToLower()))
+                    {
+                        responseMood = i;
+                        break;
+                    }
+                }
+
+                Debug.Log("responseMood success: " + responseMood);
+
+                foreach (ObserverInterface observer in observers)
+                {
+                    if (observer == null)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        observer.UpdateObserver(response, responseMood);
+                        dialogTextHandlerScript.StoreResponse(response);
+                    }
+                }
+            }
+
+            // re-enable send button 
+            sendInputField.text = "";
+            sendInputField.interactable = true;
+            sendButton.interactable = true;
+            foreach (Button button in actionButtons)
+            {
+                button.interactable = true;
+            }
+            www.Dispose();
         }
-        www.Dispose();
     }
 
     // Private class for dealing with making JSON for /api/v1/generate
@@ -192,6 +297,14 @@ public class LogicScript : MonoBehaviour
         public string prompt;
         public float temperature;
         public float rep_pen;
+    }
+
+    // Private class for dealing with making JSON for zero shot classification /classify
+    private class GenerateZeroShotRequestObject
+    {
+        public string text;
+        public List<string> candidate_labels;
+        public float neutral_scale;
     }
 
     // For when the user has just exited settings page for the first time (display greeting / continuation of last dialog)
