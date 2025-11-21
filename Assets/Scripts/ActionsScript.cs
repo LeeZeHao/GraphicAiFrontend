@@ -241,7 +241,7 @@ public class ActionsScript : MonoBehaviour
 
     public void OnClickShowImage()
     {
-        SendShowImageRequest(showImageInputField.text);
+        SendShowImageRequest("");
     }
 
     public void SendShowImageRequest(string text)
@@ -280,11 +280,11 @@ public class ActionsScript : MonoBehaviour
             cleaned_text = cleaned_text.Replace("\"}", "");
             if (sendInputField.text.Length > 0)
             {
-                sendInputField.text += " *" + cleaned_text + ".*";
+                sendInputField.text += " *" + showImageInputField.text + " " + cleaned_text + ".*";
             } 
             else
             {
-                sendInputField.text = "*" + cleaned_text + ".*";
+                sendInputField.text = "*" + showImageInputField.text + " " + cleaned_text + ".*";
             }
             
         }
