@@ -5,6 +5,9 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
+using System.Text;
+using System.Collections;
 
 public class ActionsScript : MonoBehaviour
 {
@@ -21,6 +24,9 @@ public class ActionsScript : MonoBehaviour
     [SerializeField] TMP_InputField actionInputField1;
     [SerializeField] TMP_InputField actionInputField2;
     [SerializeField] TMP_InputField actionInputField3;
+    [SerializeField] TMP_InputField showImageInputField;
+
+    [SerializeField] TMP_InputField sendInputField;
 
     // for Websites
     [SerializeField] TMP_Dropdown websiteDropdown;
@@ -68,6 +74,7 @@ public class ActionsScript : MonoBehaviour
             actionInputField1.text = actionsSaveObject.body1;
             actionInputField2.text = actionsSaveObject.body2;
             actionInputField3.text = actionsSaveObject.body3;
+            showImageInputField.text = actionsSaveObject.showImage;
 
             websiteNames = actionsSaveObject.websiteNames;
             websiteLinks = actionsSaveObject.websiteLinks;
@@ -112,6 +119,7 @@ public class ActionsScript : MonoBehaviour
         actionsSaveObject.body1 = actionInputField1.text;
         actionsSaveObject.body2 = actionInputField2.text;
         actionsSaveObject.body3 = actionInputField3.text;
+        actionsSaveObject.showImage = showImageInputField.text;
 
         actionsSaveObject.websiteNames = websiteNames;
         actionsSaveObject.websiteLinks = websiteLinks;
@@ -128,6 +136,7 @@ public class ActionsScript : MonoBehaviour
         public string body1;
         public string body2;
         public string body3;
+        public string showImage;
 
         public List<string> websiteNames;
         public List<string> websiteLinks;
@@ -228,5 +237,64 @@ public class ActionsScript : MonoBehaviour
 
         Debug.Log("Open website with prompt: " + websitePrompts[openWebsiteDropdown.value]);
         logicScript.Send(websitePrompts[openWebsiteDropdown.value]);
+    }
+
+    public void OnClickShowImage()
+    {
+        SendShowImageRequest(showImageInputField.text);
+    }
+
+    public void SendShowImageRequest(string text)
+    {
+        string url = settingsScript.zeroShotUrl + "/image_to_text";
+
+        var payload = new ShowImageRequestData
+        {
+            text = text,
+            folder_path = settingsScript.folder + "/show_image"
+        };
+
+        string json = JsonUtility.ToJson(payload);
+        StartCoroutine(PostRequest(url, json));
+    }
+
+    private IEnumerator PostRequest(string url, string json)
+    {
+        UnityWebRequest req = new UnityWebRequest(url, "POST");
+        byte[] body = Encoding.UTF8.GetBytes(json);
+        req.uploadHandler = new UploadHandlerRaw(body);
+        req.downloadHandler = new DownloadHandlerBuffer();
+
+        req.SetRequestHeader("Content-Type", "application/json");
+
+        yield return req.SendWebRequest();
+
+        if (req.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError("API Error: " + req.error);
+        }
+        else
+        {
+            Debug.Log("Response: " + req.downloadHandler.text);
+            string cleaned_text = req.downloadHandler.text.Replace("{\"response\":\"", "");
+            cleaned_text = cleaned_text.Replace("\"}", "");
+            if (sendInputField.text.Length > 0)
+            {
+                sendInputField.text += " *" + cleaned_text + ".*";
+            } 
+            else
+            {
+                sendInputField.text = "*" + cleaned_text + ".*";
+            }
+            
+        }
+    }
+    
+
+    [System.Serializable]
+    public class ShowImageRequestData
+    {
+        public string text;
+        public string folder_path;
     }
 }

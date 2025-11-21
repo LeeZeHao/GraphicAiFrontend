@@ -43,6 +43,10 @@ public class SettingsScript : MonoBehaviour
 
     [SerializeField] private TMP_Text closeStatusText;
 
+    // Use this to show the character an image.
+    // Cannot be used if the python script is not active.
+    [SerializeField] private Button showImageButton;
+
     [HideInInspector] public string url = "http://localhost:5001";
     [HideInInspector] public string zeroShotUrl = "http://127.0.0.1:8000";
     [HideInInspector] public string folder = Application.dataPath + "/character";
@@ -237,6 +241,9 @@ public class SettingsScript : MonoBehaviour
         } else {
             // Save all settings
             SaveSettings();
+
+            // If no python script connected, cannot show image (image to text) to character
+            showImageButton.interactable = isZeroShotConnected;
 
             closeStatusText.text = "";
             settingsCanvas.gameObject.SetActive(false); 
