@@ -22,6 +22,7 @@ public class LogicScript : MonoBehaviour
     private string url = "http://localhost:5001";
     private float temperature = 0.75f;
     private float repPen = 1.07f;
+    private int maxLength = 140;
 
     private string format2 = " ";
     private string format3 = " ";
@@ -30,6 +31,7 @@ public class LogicScript : MonoBehaviour
         url = settingsScript.url;
         temperature = settingsScript.temperature;
         repPen = settingsScript.repPen;
+        maxLength = settingsScript.maxLength;
 
         this.format2 = settingsScript.format2;
         this.format3 = settingsScript.format3;
@@ -61,12 +63,17 @@ public class LogicScript : MonoBehaviour
         generateRequestObject.prompt = prompt;
         generateRequestObject.temperature = temperature; 
         generateRequestObject.rep_pen = repPen;
-        generateRequestObject.stop_sequence = new List<string>
-            {
-                format2.Replace("\n", ""),
-                format3.Replace("\n", "")
-            };
-        generateRequestObject.max_length = 140;
+        generateRequestObject.stop_sequence = new List<string>();
+        if (format2.Trim() != "")
+        {
+            generateRequestObject.stop_sequence.Add(format2.Trim());
+        }
+        if (format3.Trim() != "")
+        {
+            generateRequestObject.stop_sequence.Add(format3.Trim());
+        }
+
+        generateRequestObject.max_length = this.maxLength;
         string generateRequestString = JsonUtility.ToJson(generateRequestObject);
 
         // disable send button

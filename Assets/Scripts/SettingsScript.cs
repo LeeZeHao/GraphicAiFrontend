@@ -25,6 +25,7 @@ public class SettingsScript : MonoBehaviour
 
     [SerializeField] private TMP_InputField temperatureInputField;
     [SerializeField] private TMP_InputField repPenInputField;
+    [SerializeField] private TMP_InputField maxLengthInputField;
     [SerializeField] private TMP_InputField neutralScaleInputField;
 
     [SerializeField] private TMP_InputField formatInputField1;
@@ -52,6 +53,7 @@ public class SettingsScript : MonoBehaviour
     [HideInInspector] public string folder = Application.dataPath + "/character";
     [HideInInspector] public float temperature = 0.75f;
     [HideInInspector] public float repPen = 1.07f;
+    [HideInInspector] public int maxLength = 140;
     [HideInInspector] public float neutralScale = 0.5f;
 
     [HideInInspector] public List<string> emotions = new List<string> { "neutral" };
@@ -70,6 +72,7 @@ public class SettingsScript : MonoBehaviour
         folderInputField.text = folder;
         temperatureInputField.text = temperature.ToString();
         repPenInputField.text = repPen.ToString();
+        maxLengthInputField.text = maxLength.ToString();
         neutralScaleInputField.text = neutralScale.ToString();
 
         formatInputField1.text = format1;
@@ -306,6 +309,7 @@ public class SettingsScript : MonoBehaviour
             this.zeroShotUrl = settingsSaveObject.zeroShotUrl;
             this.temperature = settingsSaveObject.temperature;
             this.repPen = settingsSaveObject.repPen;
+            this.maxLength = settingsSaveObject.maxLength;
             this.neutralScale = settingsSaveObject.neutralScale;
 
             this.format1 = settingsSaveObject.format1;
@@ -325,6 +329,7 @@ public class SettingsScript : MonoBehaviour
             zeroShotInputField.text = zeroShotUrl;
             temperatureInputField.text = temperature.ToString();
             repPenInputField.text = repPen.ToString();
+            maxLengthInputField.text = maxLength.ToString();
             neutralScaleInputField.text = neutralScale.ToString();
 
             saveStatusText.text = "Previous settings loaded. (" + Application.dataPath + "/SettingsSave.txt)";
@@ -338,6 +343,7 @@ public class SettingsScript : MonoBehaviour
         // need to grab values of the float input fields and formats too!
         float.TryParse(temperatureInputField.text, out this.temperature);
         float.TryParse(repPenInputField.text, out this.repPen);
+        int.TryParse(maxLengthInputField.text, out this.maxLength);
         float.TryParse(neutralScaleInputField.text, out this.neutralScale);
         format1 = formatInputField1.text;
         format2 = formatInputField2.text;
@@ -351,6 +357,7 @@ public class SettingsScript : MonoBehaviour
         settingsSaveObject.zeroShotUrl = zeroShotUrl;
         settingsSaveObject.temperature = temperature;
         settingsSaveObject.repPen = repPen;
+        settingsSaveObject.maxLength = maxLength;
         settingsSaveObject.neutralScale = neutralScale;
         settingsSaveObject.format1 = format1.Replace("\\n", "\n");
         settingsSaveObject.format2 = format2.Replace("\\n", "\n");
@@ -373,6 +380,7 @@ public class SettingsScript : MonoBehaviour
 
         public float temperature;
         public float repPen;
+        public int maxLength;
         public float neutralScale;
 
         public string format1;
