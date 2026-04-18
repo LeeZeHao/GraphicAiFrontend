@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -55,15 +56,15 @@ public class DialogTextHandlerScript : MonoBehaviour {
 
         finalPrompt += format1;
         finalPrompt += context;
-        finalPrompt += format2;
-        finalPrompt += firstDialog;
         finalPrompt += format3;
+        finalPrompt += firstDialog;
+        finalPrompt += format2;
 
         for (int i = 0; i < messages.Count; i++) {
             finalPrompt += messages[i];
-            finalPrompt += format4;
-            finalPrompt += responses[i];
             finalPrompt += format3;
+            finalPrompt += responses[i];
+            finalPrompt += format2;
         }
 
         // SUMMARY ADDED HERE
@@ -78,7 +79,14 @@ public class DialogTextHandlerScript : MonoBehaviour {
             }
         }
         finalPrompt += message;
-        finalPrompt += format4;
+        if (format4.Trim() != "")
+        {
+            finalPrompt += format4;
+        }
+        else
+        {
+            finalPrompt += format3;
+        }
 
         shouldStoreResponse = true;
         return finalPrompt;

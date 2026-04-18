@@ -23,10 +23,16 @@ public class LogicScript : MonoBehaviour
     private float temperature = 0.75f;
     private float repPen = 1.07f;
 
+    private string format2 = " ";
+    private string format3 = " ";
+
     private void GetSettings() { 
         url = settingsScript.url;
         temperature = settingsScript.temperature;
         repPen = settingsScript.repPen;
+
+        this.format2 = settingsScript.format2;
+        this.format3 = settingsScript.format3;
     }
 
     public void onClickSendButton() {
@@ -55,6 +61,12 @@ public class LogicScript : MonoBehaviour
         generateRequestObject.prompt = prompt;
         generateRequestObject.temperature = temperature; 
         generateRequestObject.rep_pen = repPen;
+        generateRequestObject.stop_sequence = new List<string>
+            {
+                format2.Replace("\n", ""),
+                format3.Replace("\n", "")
+            };
+        generateRequestObject.max_length = 140;
         string generateRequestString = JsonUtility.ToJson(generateRequestObject);
 
         // disable send button
@@ -100,7 +112,7 @@ public class LogicScript : MonoBehaviour
             string result = www.downloadHandler.text;
 
             result = result.Split("\"text\": \"")[1];
-            result = result.Split("\", \"finish_reason\"")[0];
+            result = result.Split("\", \"tool_calls\"")[0];
 
             StartCoroutine(PostCheckSentiment(result));
 
@@ -297,6 +309,8 @@ public class LogicScript : MonoBehaviour
         public string prompt;
         public float temperature;
         public float rep_pen;
+        public List<string> stop_sequence;
+        public int max_length;
     }
 
     // Private class for dealing with making JSON for zero shot classification /classify

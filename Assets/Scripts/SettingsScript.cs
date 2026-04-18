@@ -312,6 +312,10 @@ public class SettingsScript : MonoBehaviour
             this.format2 = settingsSaveObject.format2;
             this.format3 = settingsSaveObject.format3;
             this.format4 = settingsSaveObject.format4;
+            formatInputField1.text = this.format1;
+            formatInputField2.text = this.format2;
+            formatInputField3.text = this.format3;
+            formatInputField4.text = this.format4;
 
             this.emotions = settingsSaveObject.emotions;
             DisplayEmotions();
@@ -348,10 +352,10 @@ public class SettingsScript : MonoBehaviour
         settingsSaveObject.temperature = temperature;
         settingsSaveObject.repPen = repPen;
         settingsSaveObject.neutralScale = neutralScale;
-        settingsSaveObject.format1 = format1;
-        settingsSaveObject.format2 = format2;
-        settingsSaveObject.format3 = format3;
-        settingsSaveObject.format4 = format4;
+        settingsSaveObject.format1 = format1.Replace("\\n", "\n");
+        settingsSaveObject.format2 = format2.Replace("\\n", "\n");
+        settingsSaveObject.format3 = format3.Replace("\\n", "\n");
+        settingsSaveObject.format4 = format4.Replace("\\n", "\n");
 
         settingsSaveObject.emotions = emotions;
 
