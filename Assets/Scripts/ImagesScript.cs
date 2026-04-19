@@ -52,6 +52,8 @@ public class ImagesScript : MonoBehaviour
     [HideInInspector] public Sprite effect2b;
     [HideInInspector] public Sprite effect3b;
 
+    
+
     void Awake()
     {
         // Make a transparent sprite as a stand in for the effects by default
@@ -60,7 +62,6 @@ public class ImagesScript : MonoBehaviour
         tex.Apply();
 
         Sprite transparentSprite = Sprite.Create(tex, new Rect(0, 0, 1, 1), Vector2.one * 0.5f);
-
         effect0 = effect1 = effect2 = effect3 =
         effect0a = effect1a = effect2a = effect3a =
         effect0b = effect1b = effect2b = effect3b =
@@ -110,6 +111,18 @@ public class ImagesScript : MonoBehaviour
         }
 
         // Effect images are optional, use a bunch of try catches
+        // For effects
+        // Make a transparent sprite as a stand in for the effects by default
+        Texture2D tex = new Texture2D(1, 1);
+        tex.SetPixel(0, 0, Color.clear);
+        tex.Apply();
+
+        Sprite transparentSprite = Sprite.Create(tex, new Rect(0, 0, 1, 1), Vector2.one * 0.5f);
+        effect0 = effect1 = effect2 = effect3 =
+        effect0a = effect1a = effect2a = effect3a =
+        effect0b = effect1b = effect2b = effect3b =
+        transparentSprite;
+
         try
         {
             effect0Tex = GetTexFromFile(folder + "/effect0.png");

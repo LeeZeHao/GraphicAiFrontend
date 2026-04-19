@@ -76,6 +76,7 @@ public class SpriteScript : ObserverInterface
         this.body = statusScript.GetBody();
 
         UpdateSprite();
+        ShowSprites();
 
         if (isAudioEnabled) {
             notificationAudioSource.PlayOneShot(notificationAudio, 3f);
@@ -184,6 +185,28 @@ public class SpriteScript : ObserverInterface
             effect3Image.gameObject.SetActive(effect3Active);
         }
         */
+    }
+
+    public void HideSprites()
+    {
+        bodyImage.enabled = false;
+        faceImage.enabled = false;
+        
+        effect0Image.enabled = false;
+        effect1Image.enabled = false;
+        effect2Image.enabled = false;
+        effect3Image.enabled = false;
+    }
+
+    public void ShowSprites()
+    {
+        bodyImage.enabled = true;
+        faceImage.enabled = true;
+
+        effect0Image.enabled = true;
+        effect1Image.enabled = true;
+        effect2Image.enabled = true;
+        effect3Image.enabled = true;
     }
 
     private void UpdateSprite() {

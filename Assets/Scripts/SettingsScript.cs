@@ -16,6 +16,7 @@ public class SettingsScript : MonoBehaviour
     [SerializeField] private TMP_Text urlStatusText;
 
     [SerializeField] private ImagesScript imagesScript;
+    [SerializeField] private SpriteScript spriteScript;
     [SerializeField] private TMP_InputField folderInputField;
     [SerializeField] private TMP_Text folderStatusText;
 
@@ -149,6 +150,7 @@ public class SettingsScript : MonoBehaviour
             folderStatusText.text = "Unable to load images, check if folder path correct + all images exist and are named properly!";
         } else {
             folderStatusText.text = "Folder initialized, images, context, actions loaded.\n" + folderInputField.text;
+            spriteScript.HideSprites();
             isFolderInit = true;
         }
     }

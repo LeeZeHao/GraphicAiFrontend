@@ -34316,6 +34316,7 @@ MonoBehaviour:
   urlInputField: {fileID: 1749223133}
   urlStatusText: {fileID: 1047748219}
   imagesScript: {fileID: 1195656867}
+  spriteScript: {fileID: 1195656866}
   folderInputField: {fileID: 645057975}
   folderStatusText: {fileID: 1496789779}
   zeroShotButton: {fileID: 1695662554}
