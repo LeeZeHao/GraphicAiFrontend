@@ -85,10 +85,25 @@ public class SettingsScript : MonoBehaviour
 
     public void OnClickSettingsButton() {
         // Set back to false so user has to confirm again next time they open settings
-        isUrlConnected = false;
-        isFolderInit = false;
-        urlStatusText.text = "No backend connected...";
-        folderStatusText.text = "Folder not initialized...";
+        //isUrlConnected = false;
+        //isFolderInit = false;
+        if (isUrlConnected)
+        {
+
+        }
+        else
+        {
+            urlStatusText.text = "No backend connected...";
+        }
+            
+        if (isFolderInit)
+        {
+            
+        }
+        else
+        {
+            folderStatusText.text = "Folder not initialized...";
+        }
 
         LoadSettings();
         settingsCanvas.gameObject.SetActive(true);
@@ -133,7 +148,7 @@ public class SettingsScript : MonoBehaviour
         if (imagesScript.InitImages(folder, emotions) == false) {
             folderStatusText.text = "Unable to load images, check if folder path correct + all images exist and are named properly!";
         } else {
-            folderStatusText.text = "Folder initialized, images, context, actions loaded.";
+            folderStatusText.text = "Folder initialized, images, context, actions loaded.\n" + folderInputField.text;
             isFolderInit = true;
         }
     }
