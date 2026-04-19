@@ -34276,6 +34276,7 @@ GameObject:
   - component: {fileID: 1195656869}
   - component: {fileID: 1195656871}
   - component: {fileID: 1195656872}
+  - component: {fileID: 1195656873}
   m_Layer: 0
   m_Name: Logic
   m_TagString: Untagged
@@ -34373,6 +34374,7 @@ MonoBehaviour:
   dialogTextHandlerScript: {fileID: 1195656861}
   statusScript: {fileID: 1195656864}
   summaryScript: {fileID: 1195656870}
+  pollCurrentTextGenScript: {fileID: 1195656873}
   sendInputField: {fileID: 1697908651}
   sendButton: {fileID: 1452143530}
   actionButtons:
@@ -34741,6 +34743,22 @@ MonoBehaviour:
   effectInputField1b: {fileID: 507905565}
   effectInputField2b: {fileID: 694978863}
   effectInputField3b: {fileID: 991677801}
+--- !u!114 &1195656873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1195656857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ada656af040f9a4aad71ea7411eabe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  settingsScript: {fileID: 1195656859}
+  dialogBoxScript: {fileID: 1195656862}
+  requestTimeout: 3
+  intervalSeconds: 0.1
 --- !u!1 &1200342888
 GameObject:
   m_ObjectHideFlags: 0

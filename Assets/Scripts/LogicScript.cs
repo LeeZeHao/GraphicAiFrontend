@@ -14,6 +14,7 @@ public class LogicScript : MonoBehaviour
     [SerializeField] DialogTextHandlerScript dialogTextHandlerScript;
     [SerializeField] StatusScript statusScript;
     [SerializeField] SummaryScript summaryScript;
+    [SerializeField] PollCurrentTextGenScript pollCurrentTextGenScript;
 
     [SerializeField] TMP_InputField sendInputField;
     [SerializeField] Button sendButton;
@@ -101,7 +102,11 @@ public class LogicScript : MonoBehaviour
 
         UnityWebRequest www = UnityWebRequest.Post(url + "/api/v1/generate", data, "application/json");
 
+        pollCurrentTextGenScript.StartPolling(); // Start the live text gen polling
+
         yield return www.SendWebRequest();
+
+        pollCurrentTextGenScript.StopPolling(); // Stop the live text gen polling
 
         if (www.result != UnityWebRequest.Result.Success) {
 

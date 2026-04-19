@@ -19,15 +19,24 @@ public class DialogBoxScript : ObserverInterface
 
         responseText.text = finalText;
         responseText.enabled = true;
+        responseText.color = Color.white;
     }
 
     public override void Waiting() {
         responseText.text = "Sending...";
         responseText.enabled = true;
+        responseText.color = Color.white;
     }
 
     public override void ServerError(string error) {
         responseText.text = "An error has occured, please check connection to server!\n" + error;
         responseText.enabled = true;
+        responseText.color = Color.white;
+    }
+
+    public void UpdatePollCurrentTextGen(string partialResponse)
+    {
+        responseText.text = partialResponse;
+        responseText.color = new Color(1f, 1f, 1f, 0.5f);
     }
 }
