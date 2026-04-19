@@ -12,7 +12,7 @@ public class PollCurrentTextGenScript : MonoBehaviour
     private Coroutine pollingCoroutine;
     private string url = "http://localhost:5001";
     private string endpointUrl = "http://localhost:5001/api/extra/generate/check";
-    public float intervalSeconds = 0.1f;
+    public float intervalSeconds = 0.05f;
     private void GetSettings()
     {
         this.url = settingsScript.url;
@@ -39,6 +39,7 @@ public class PollCurrentTextGenScript : MonoBehaviour
 
     IEnumerator GetRequestLoop()
     {
+        yield return new WaitForSeconds(0.3f);
         while (true)
         {
             yield return StartCoroutine(GetRequest());
@@ -68,7 +69,7 @@ public class PollCurrentTextGenScript : MonoBehaviour
                 {
                     string text = data.results[0].text;
                     Debug.Log("Extracted text: " + text);
-                    if (shouldPoll) // Check so that we do not override the final result
+                    if (shouldPoll && text != null) // Check so that we do not override the final result
                     {
                         dialogBoxScript.UpdatePollCurrentTextGen(text);
                     }

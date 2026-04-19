@@ -36,7 +36,10 @@ public class DialogBoxScript : ObserverInterface
 
     public void UpdatePollCurrentTextGen(string partialResponse)
     {
-        responseText.text = partialResponse;
-        responseText.color = new Color(1f, 1f, 1f, 0.5f);
+        if (partialResponse != null)
+        {
+            responseText.text = partialResponse;
+            responseText.color = new Color(1f, 1f, 1f, 0.6f);
+        }
     }
 }
