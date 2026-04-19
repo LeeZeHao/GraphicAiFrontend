@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class LogicScript : MonoBehaviour
 {
@@ -17,16 +18,23 @@ public class LogicScript : MonoBehaviour
     [SerializeField] PollCurrentTextGenScript pollCurrentTextGenScript;
 
     [SerializeField] TMP_InputField sendInputField;
-    [SerializeField] Button sendButton;
-    [SerializeField] Button[] actionButtons;
+    [SerializeField] UnityEngine.UI.Button sendButton;
+    [SerializeField] UnityEngine.UI.Button[] actionButtons;
 
     private string url = "http://localhost:5001";
     private float temperature = 0.75f;
     private float repPen = 1.07f;
     private int maxLength = 140;
 
+    public bool isGenerating = false;
+
     private string format2 = " ";
     private string format3 = " ";
+
+    void Start()
+    {
+        sendInputField.onSubmit.AddListener(OnSendInputFieldSubmit);
+    }
 
     private void GetSettings() { 
         url = settingsScript.url;
@@ -39,7 +47,17 @@ public class LogicScript : MonoBehaviour
     }
 
     public void onClickSendButton() {
-        Send(sendInputField.text);
+        if (!isGenerating)
+        {
+            Send(sendInputField.text);
+        }
+    }
+    private void OnSendInputFieldSubmit(string text)
+    {
+        if (!isGenerating)
+        {
+            Send(sendInputField.text);
+        }
     }
 
     public void Send(string userMessage) {
@@ -80,7 +98,8 @@ public class LogicScript : MonoBehaviour
         // disable send button
         sendInputField.interactable = false;
         sendButton.interactable = false;
-        foreach (Button button in actionButtons) {
+        isGenerating = true;
+        foreach (UnityEngine.UI.Button button in actionButtons) {
             button.interactable = false;
         }
 
@@ -214,8 +233,10 @@ public class LogicScript : MonoBehaviour
             // re-enable send button 
             sendInputField.text = "";
             sendInputField.interactable = true;
+            sendInputField.ActivateInputField();
             sendButton.interactable = true;
-            foreach (Button button in actionButtons)
+            isGenerating = false;
+            foreach (UnityEngine.UI.Button button in actionButtons)
             {
                 button.interactable = true;
             }
@@ -307,8 +328,10 @@ public class LogicScript : MonoBehaviour
             // re-enable send button 
             sendInputField.text = "";
             sendInputField.interactable = true;
+            sendInputField.ActivateInputField();
             sendButton.interactable = true;
-            foreach (Button button in actionButtons)
+            isGenerating = false;
+            foreach (UnityEngine.UI.Button button in actionButtons)
             {
                 button.interactable = true;
             }
